@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
@@ -12,14 +15,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final PageController _pageController = PageController();
 
   // Form fields
-  String? firstName, lastName, email, password;
+  String? name, email, password;
   String? gender, birthdate, nationalId, phone, city;
 
   void _nextPage() {
     if (_formKey1.currentState!.validate()) {
       _formKey1.currentState!.save();
       _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -30,18 +33,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       _formKey2.currentState!.save();
 
       // Print data for debugging
-      print('First Name: $firstName');
-      print('Last Name: $lastName');
-      print('Email: $email');
-      print('Password: $password');
-      print('Gender: $gender');
-      print('Birthdate: $birthdate');
-      print('National ID: $nationalId');
-      print('Phone: $phone');
-      print('City: $city');
+      // print('First Name: $firstName');
+      // print('Last Name: $lastName');
+      // print('Email: $email');
+      // print('Password: $password');
+      // print('Gender: $gender');
+      // print('Birthdate: $birthdate');
+      // print('National ID: $nationalId');
+      // print('Phone: $phone');
+      // print('City: $city');
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Registration Successful!'),
           backgroundColor: Colors.green,
         ),
@@ -56,14 +59,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       appBar: AppBar(
         backgroundColor: Colors.teal,
         automaticallyImplyLeading: false,
-        title: Text(
+        title: const Text(
           'Patient Registration',
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: PageView(
         controller: _pageController,
-        physics: NeverScrollableScrollPhysics(), // Disable swipe
+        physics: const NeverScrollableScrollPhysics(), // Disable swipe
         children: [
           // First Page
           Padding(
@@ -73,7 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Personal Information',
                     style: TextStyle(
                       fontSize: 24,
@@ -81,46 +84,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       color: Colors.teal,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'First Name'),
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter your first name' : null,
-                    onSaved: (value) => firstName = value,
+                    decoration: const InputDecoration(labelText: 'Name'),
+                    validator: (value) {
+                      FirebaseFirestore.instance.collection('patients1').add(
+                        {
+                          'name': value,
+                          'prescriptions': [],
+                        },
+                      );
+                      return value!.isEmpty ? 'Please enter your Name' : null;
+                    },
+                    onSaved: (value) => name = value,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Last Name'),
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter your last name' : null,
-                    onSaved: (value) => lastName = value,
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Email'),
+                    decoration: const InputDecoration(labelText: 'Email'),
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter your email' : null,
                     onSaved: (value) => email = value,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Password'),
+                    decoration: const InputDecoration(labelText: 'Password'),
                     obscureText: true,
                     validator: (value) => value!.length < 6
                         ? 'Password must be at least 6 characters'
                         : null,
                     onSaved: (value) => password = value,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Confirm Password'),
+                    decoration:
+                        const InputDecoration(labelText: 'Confirm Password'),
                     obscureText: true,
                     validator: (value) => value!.length < 6
                         ? 'Password must be at least 6 characters'
                         : null,
                     onSaved: (value) => password = value,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
@@ -128,7 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.teal,
                       ),
-                      child: Text(
+                      child: const Text(
                         'Next',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -146,7 +150,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Additional Information',
                     style: TextStyle(
                       fontSize: 24,
@@ -154,9 +158,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       color: Colors.teal,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
-                    decoration: InputDecoration(labelText: 'Gender'),
+                    decoration: const InputDecoration(labelText: 'Gender'),
                     items: ['Male', 'Female']
                         .map((gender) => DropdownMenuItem<String>(
                               value: gender,
@@ -167,9 +171,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     validator: (value) =>
                         value == null ? 'Please select your gender' : null,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Birthdate'),
+                    decoration: const InputDecoration(labelText: 'Birthdate'),
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
@@ -188,43 +192,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     validator: (value) =>
                         value!.isEmpty ? 'Please select your birthdate' : null,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'National ID'),
+                    decoration: const InputDecoration(labelText: 'National ID'),
                     keyboardType: TextInputType.number,
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter your national ID' : null,
                     onSaved: (value) => nationalId = value,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Phone Number'),
+                    decoration:
+                        const InputDecoration(labelText: 'Phone Number'),
                     keyboardType: TextInputType.phone,
                     validator: (value) => value!.isEmpty
                         ? 'Please enter your phone number'
                         : null,
                     onSaved: (value) => phone = value,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'City'),
+                    decoration: const InputDecoration(labelText: 'City'),
                     validator: (value) =>
                         value!.isEmpty ? 'Please enter your city' : null,
                     onSaved: (value) => city = value,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
                         onPressed: () => _pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.teal,
                         ),
-                        child: Text(
+                        child: const Text(
                           'Back',
                           style: TextStyle(color: Colors.white),
                         ),
@@ -234,7 +239,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.teal,
                         ),
-                        child: Text(
+                        child: const Text(
                           'Submit',
                           style: TextStyle(color: Colors.white),
                         ),

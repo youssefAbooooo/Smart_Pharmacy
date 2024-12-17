@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "854582688598",
+    "project_id": "smart-pharmacy-7e3cc",
+    "storage_bucket": "smart-pharmacy-7e3cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854582688598:android:5331608bea9f20c622f4f7",
+        "android_client_info": {
+          "package_name": "com.example.flutter_medicen_proj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5HBuPaRbU4rPMEggSirPyHg5qbg5eaW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

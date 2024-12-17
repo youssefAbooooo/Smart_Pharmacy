@@ -1,14 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanar_proj/Screens/show_PrescriptionScreen.dart';
+import 'package:flutter_sanar_proj/models/patients1.dart';
 import 'rpd_button.dart';
 
 class PatientContainer extends StatelessWidget {
   const PatientContainer({
     super.key,
-    required this.name,
+    required this.patient,
   });
 
-  final String name;
+  final Patients1 patient;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class PatientContainer extends StatelessWidget {
                 style: TextStyle(fontSize: 18),
               ),
               Text(
-                name,
+                patient.name,
                 style: const TextStyle(fontSize: 22),
               ),
             ],
@@ -60,10 +62,13 @@ class PatientContainer extends StatelessWidget {
                       icon: Icons.remove_red_eye_outlined,
                       onpressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ShowPrescriptionScreen()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShowPrescriptionScreen(
+                              prescriptionList: patient.prescriptions,
+                            ),
+                          ),
+                        );
                       },
                       color: Colors.green,
                       content: "      Show\nPrescription"),
@@ -75,7 +80,23 @@ class PatientContainer extends StatelessWidget {
                   const Spacer(flex: 1),
                   RejectPendinDoneButton(
                       icon: Icons.remove_circle_outline,
-                      onpressed: () {},
+                      onpressed: () async {
+                        FirebaseFirestore firestore =
+                            FirebaseFirestore.instance;
+
+                        // Query to find the document with the specific name
+                        QuerySnapshot querySnapshot = await firestore
+                            .collection('patients1')
+                            .where('name', isEqualTo: patient.name)
+                            .get();
+
+                        // Check if any documents match the query
+                        if (querySnapshot.docs.isNotEmpty) {
+                          // Delete the first matching document
+                          // If you expect multiple documents, you might want to handle this differently
+                          await querySnapshot.docs.first.reference.delete();
+                        }
+                      },
                       color: Colors.red,
                       content: "     remove\n     Patient"),
                   const Spacer(flex: 1),

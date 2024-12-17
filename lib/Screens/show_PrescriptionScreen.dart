@@ -3,13 +3,16 @@ import 'package:flutter_sanar_proj/Widgets/y_widgets/rpd_button.dart';
 import 'package:flutter_sanar_proj/Widgets/y_widgets/search_bar.dart';
 
 class ShowPrescriptionScreen extends StatelessWidget {
-  final List<String> names = ['Concor 5 Plus', 'Zurcal', 'Natrilix-SR'];
+  // final List<String> names = ['Concor 5 Plus', 'Zurcal', 'Natrilix-SR'];
 
-  ShowPrescriptionScreen({super.key});
+  const ShowPrescriptionScreen({super.key, required this.prescriptionList});
+
+  final List<dynamic> prescriptionList;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.teal,
         title: const Text(
@@ -30,9 +33,10 @@ class ShowPrescriptionScreen extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return PrescriptionContainer(name: names[index]);
+                  return PrescriptionContainer(name: prescriptionList[index]);
                 },
-                childCount: names.length, // Total number of items in the list
+                childCount: prescriptionList
+                    .length, // Total number of items in the list
               ),
             ),
           ],

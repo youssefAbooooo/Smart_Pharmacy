@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sanar_proj/Login-Signup/login.dart';
 import 'package:flutter_sanar_proj/Login-Signup/login_signup.dart';
@@ -5,9 +6,14 @@ import 'package:flutter_sanar_proj/On_Board/on_boarding.dart';
 import 'package:flutter_sanar_proj/Screens/screen1.dart';
 import 'package:flutter_sanar_proj/Screens/selected_medicine.dart';
 import 'package:flutter_sanar_proj/Widgets/y_widgets/bottom_app_bar.dart';
+import 'package:flutter_sanar_proj/firebase_options.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
