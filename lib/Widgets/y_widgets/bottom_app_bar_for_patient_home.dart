@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sanar_proj/Screens/patient_home.dart';
+import 'package:flutter_sanar_proj/Screens/qrcode.dart';
 
 class BottomAppBarSelectionForPatientHomePage extends StatefulWidget {
   const BottomAppBarSelectionForPatientHomePage({super.key});
@@ -13,7 +14,7 @@ class _BottomAppBarSelectionForPatientHomePageState
     extends State<BottomAppBarSelectionForPatientHomePage> {
   List<Widget> screens = [
     Center(child: PatientHome()),
-    //! add the QR code scanner screen here
+    Center(child: QRGeneratorScreen()),
     const Center(child: Text('QR Code Scanner')),
   ];
   int selectedIndex = 0;
