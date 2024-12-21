@@ -85,17 +85,18 @@ class PrescriptionContainer extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
+              const SizedBox(width: 20),
               RejectPendinDoneButton(
                   icon: Icons.remove_red_eye_outlined,
                   onpressed: () {},
                   color: Colors.green,
-                  content: "  Medicine\n  Details"),
-              // const Spacer(),
+                  content: "Medicine\nDetails"),
+              const SizedBox(width: 20),
               RejectPendinDoneButton(
                   icon: Icons.remove_circle_outline,
                   onpressed: () {},
                   color: Colors.red,
-                  content: "     remove\n     Medicines"),
+                  content: "remove\nMedicines"),
             ],
           )
         ],

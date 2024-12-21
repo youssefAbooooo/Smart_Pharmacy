@@ -6,7 +6,7 @@ import 'package:flutter_sanar_proj/Widgets/Login_Signup_Textfileds.dart/custom_p
 import 'package:page_transition/page_transition.dart';
 
 class LogInPage extends StatefulWidget {
-  const LogInPage({Key? key}) : super(key: key);
+  const LogInPage({super.key});
 
   @override
   _LogInPageState createState() => _LogInPageState();
@@ -17,6 +17,8 @@ class _LogInPageState extends State<LogInPage> {
   final TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  String? email;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class _LogInPageState extends State<LogInPage> {
               top: 40, // Adjust as needed for padding from top
               left: 16, // Adjust as needed for padding from left
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: blackColor),
+                icon: const Icon(Icons.arrow_back, color: blackColor),
                 onPressed: () {
                   Navigator.pushNamed(context, '/Login_Signup');
                 },
@@ -58,7 +60,7 @@ class _LogInPageState extends State<LogInPage> {
                       children: [
                         const SizedBox(
                             height: 80), // Adjust for spacing below the arrow
-                        Center(
+                        const Center(
                           child: Text(
                             "Log In",
                             style: TextStyle(
@@ -76,6 +78,7 @@ class _LogInPageState extends State<LogInPage> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
                             }
+                            email = value;
                             return null;
                           },
                         ),
@@ -104,7 +107,7 @@ class _LogInPageState extends State<LogInPage> {
                                   ),
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 "Forgot your password?",
                                 style: TextStyle(
                                   fontSize: 15,
@@ -121,7 +124,12 @@ class _LogInPageState extends State<LogInPage> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(context, '/homescreen');
+                                // Navigator.pushNamed(context, '/homescreen');
+                                if (email == 'dr.mostafa@gmail.com') {
+                                  Navigator.pushNamed(context, '/homescreen');
+                                } else if (email == 'mostafa@gmail.com') {
+                                  Navigator.pushNamed(context, 'patient_home');
+                                }
                               }
                             },
                             style: ElevatedButton.styleFrom(

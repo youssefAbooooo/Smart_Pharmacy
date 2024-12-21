@@ -4,18 +4,20 @@ import 'package:flutter_sanar_proj/Screens/medicines.dart';
 
 import '../../Screens/home_screen.dart';
 
-class BottomAppBarSelection extends StatefulWidget {
-  const BottomAppBarSelection({super.key});
+class BottomAppBarSelectionForDoctorHomePage extends StatefulWidget {
+  const BottomAppBarSelectionForDoctorHomePage({super.key});
 
   @override
-  State<BottomAppBarSelection> createState() => _BottomAppBarSelectionState();
+  State<BottomAppBarSelectionForDoctorHomePage> createState() =>
+      _BottomAppBarSelectionForDoctorHomePageState();
 }
 
-class _BottomAppBarSelectionState extends State<BottomAppBarSelection> {
+class _BottomAppBarSelectionForDoctorHomePageState
+    extends State<BottomAppBarSelectionForDoctorHomePage> {
   List<Widget> screens = [
     Center(child: MedicinesScreen()),
     Center(child: HomeScreen()),
-    Center(child: RegistrationScreen()),
+    const Center(child: RegistrationScreen()),
   ];
   int selectedIndex = 1;
   @override

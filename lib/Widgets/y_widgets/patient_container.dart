@@ -15,7 +15,7 @@ class PatientContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 4.0),
       padding: const EdgeInsets.all(2),
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -54,9 +54,9 @@ class PatientContainer extends StatelessWidget {
                         Navigator.pushNamed(context, '/SelectedMedicineScreen');
                       },
                       color: const Color(0XFFFDC008),
-                      content: "       Add\nPrescription"),
+                      content: "Add\nPrescription"),
                   const SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   RejectPendinDoneButton(
                       icon: Icons.remove_red_eye_outlined,
@@ -71,7 +71,7 @@ class PatientContainer extends StatelessWidget {
                         );
                       },
                       color: Colors.green,
-                      content: "      Show\nPrescription"),
+                      content: "Show\nPrescription"),
                 ],
               ),
               Row(
