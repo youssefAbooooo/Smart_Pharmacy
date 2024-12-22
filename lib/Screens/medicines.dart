@@ -1,127 +1,132 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sanar_proj/Widgets/y_widgets/patient_container.dart';
-import 'package:flutter_sanar_proj/Widgets/y_widgets/rpd_button.dart';
-import 'package:flutter_sanar_proj/Widgets/y_widgets/search_bar.dart';
-import 'package:flutter_sanar_proj/models/patients1.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/prescription.dart';
+import 'medicine_details_screen.dart';
+import '../Widgets/y_widgets/rpd_button.dart';
 
-class MedicinesScreen extends StatefulWidget {
-  MedicinesScreen({super.key});
+class MedicinesScreen extends StatelessWidget {
+  const MedicinesScreen({super.key});
 
-  @override
-  State<MedicinesScreen> createState() => _MedicinesScreenState();
-}
-
-class _MedicinesScreenState extends State<MedicinesScreen> {
-  final List<String> medicinesList = [
-    'Concor 5 Plus',
-    'Zurcal',
-    'Natrilix-SR',
-    'Concor 5 Plus',
-    'Zurcal',
-    'Natrilix-SR',
-    'Concor 5 Plus',
-    'Zurcal',
-    'Natrilix-SR',
-  ];
+  Stream<List<Prescription>> _getMedicines() {
+    return FirebaseFirestore.instance
+        .collection('prescriptions')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => Prescription.fromJson(doc.data()))
+        .toList());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Medicines',
-          style: TextStyle(color: Colors.white),
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.teal,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: CustomScrollView(
-          slivers: [
-            const SliverToBoxAdapter(
-              child: MySearchBar(),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return MedicinesContainer(
-                    medicine: medicinesList[index],
-                  );
-                },
-                childCount: medicinesList.length,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MedicinesContainer extends StatelessWidget {
-  const MedicinesContainer({super.key, required this.medicine});
-  final String medicine;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 4.0),
-      padding: const EdgeInsets.all(2),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0X19000000), //the color of the shadow
-            blurRadius: 20,
-            offset:
-                Offset(0, 8), //this numbers specify the location of the shadow
-          )
-        ],
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      child: Column(
-        children: [
-          Text(
-            medicine,
-            style: const TextStyle(fontSize: 22),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
           ),
-          const SizedBox(height: 6),
-          Column(
-            children: [
-              Row(
-                children: [
-                  RejectPendinDoneButton(
-                      icon: Icons.add,
-                      onpressed: () {},
-                      color: const Color(0XFFFDC008),
-                      content: "     Update\n    Medicine"),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  RejectPendinDoneButton(
-                      icon: Icons.remove_red_eye_outlined,
-                      onpressed: () {},
-                      color: Colors.green,
-                      content: "   Medicine\n   Details"),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(flex: 1),
-                  RejectPendinDoneButton(
+        ),
+        backgroundColor: const Color(0xFF009688), // Teal color
+        elevation: 0,
+      ),
+      body: StreamBuilder<List<Prescription>>(
+        stream: _getMedicines(),
+        builder: (BuildContext context, AsyncSnapshot<List<Prescription>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+
+          final medicines = snapshot.data ?? [];
+
+          if (medicines.isEmpty) {
+            return const Center(
+              child: Text('No medicines found'),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: medicines.length,
+            padding: const EdgeInsets.all(16),
+            itemBuilder: (BuildContext context, int index) {
+              final medicine = medicines[index];
+              return Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      medicine.name,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: RejectPendinDoneButton(
+                            icon: Icons.add,
+                            onpressed: () {},
+                            color: const Color(0xFFFFC107), // Yellow
+                            content: "Update\nMedicine",
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: RejectPendinDoneButton(
+                            icon: Icons.remove_red_eye_outlined,
+                            onpressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MedicineDetailsScreen(),
+                                  settings: RouteSettings(arguments: medicine),
+                                ),
+                              );
+                            },
+                            color: Colors.green,
+                            content: "Medicine\nDetails",
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    RejectPendinDoneButton(
                       icon: Icons.remove_circle_outline,
                       onpressed: () {},
                       color: Colors.red,
-                      content: "    remove\n    Medicine"),
-                  const Spacer(flex: 1),
-                ],
-              )
-            ],
-          )
-        ],
+                      content: "Remove\nMedicine",
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
