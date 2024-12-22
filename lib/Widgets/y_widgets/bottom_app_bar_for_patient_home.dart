@@ -14,7 +14,7 @@ class _BottomAppBarSelectionForPatientHomePageState
     extends State<BottomAppBarSelectionForPatientHomePage> {
   List<Widget> screens = [
     Center(child: PatientHome()),
-    Center(child: QRGeneratorScreen()),
+    Center(child: QRGeneratorScreen(patientId: 'k6qhydww6YcpyqmTptbl')),
     const Center(child: Text('QR Code Scanner')),
   ];
   int selectedIndex = 0;
